@@ -21,6 +21,8 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
     private var mSelectedOptionPosition : Int = 0
 
+    private var mCorrectAnswers = 0
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,6 +150,10 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
                     if (question!!.correctAnswer != mSelectedOptionPosition) {
 
                         answerView(mSelectedOptionPosition, R.drawable.wrong_option_border_bg)
+
+                    } else {
+
+                        mCorrectAnswers++
 
                     }
 
