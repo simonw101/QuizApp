@@ -1,5 +1,6 @@
 package com.example.quizapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
@@ -19,16 +20,19 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
     private var mQuestionsList: ArrayList<Question>? = null
 
-    private var mSelectedOptionPosition : Int = 0
+    private var mSelectedOptionPosition: Int = 0
 
     private var mCorrectAnswers = 0
 
+    private var mUserName: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         quizBinding = ActivityQuizQuestionsBinding.inflate(layoutInflater)
         setContentView(quizBinding.root)
+
+        mUserName = intent.getStringExtra(Constants.USER_NAME)
 
         mQuestionsList = Constants.getQuestions()
 
@@ -45,7 +49,7 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setQuestion() {
 
-        val question = mQuestionsList!!.get(mCurrentPosition-1)
+        val question = mQuestionsList!!.get(mCurrentPosition - 1)
 
         defaultOptionsView()
 
@@ -127,18 +131,25 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
                 if (mSelectedOptionPosition == 0) {
 
-                    mCurrentPosition ++
+                    mCurrentPosition++
 
                     when {
 
-                        mCurrentPosition <= mQuestionsList!!.size ->  {
+                        mCurrentPosition <= mQuestionsList!!.size -> {
 
                             setQuestion()
 
-                        } else  -> {
+                        }
+                        else -> {
 
                             Toast.makeText(this, "You have successfully completed the quiz", Toast.LENGTH_LONG).show()
 
+                            val intent = Intent(this, ResultActivity::class.java)
+                            intent.putExtra(Constants.USER_NAME, mUserName)
+                            intent.putExtra(Constants.CORRECT_ANSWER, mCorrectAnswers)
+                            intent.putExtra(Constants.TOTAL_QUESTIONS, mQuestionsList!!.size)
+                            startActivity(intent)
+                            finish()
                         }
 
                     }
@@ -181,7 +192,7 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun answerView(answer: Int, drawableView: Int) {
 
-        when(answer) {
+        when (answer) {
 
             1 -> {
 
@@ -195,7 +206,7 @@ class QuizQuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
             }
 
-            3-> {
+            3 -> {
 
                 quizBinding.tvOptionThree.background = ContextCompat.getDrawable(this, drawableView)
 
